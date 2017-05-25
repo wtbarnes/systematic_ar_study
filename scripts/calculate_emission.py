@@ -13,7 +13,7 @@ parser.add_argument("-m","--emiss_save",help="file to save emission results in")
 args = parser.parse_args()
 
 # restore field and emission model
-field = synthesizAR.restore(args.field_path)
+field = synthesizAR.Skeleton.restore(args.field_path)
 emiss_model = EmissionModel.restore(args.em_model_path)
 
 # calculate fractional ionization

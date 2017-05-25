@@ -13,8 +13,8 @@ parser.add_argument("-n","--nei_save",help="file to save nei results in")
 args = parser.parse_args()
 
 # restore field and emission model
-field = synthesizAR.restore(args.field_path)
-emiss_model = EmissionModel.restore(args.em_model_path)
+field = synthesizAR.Skeleton.restore(args.field_path)
+emiss_model = EmissionModel.restore(args.em_model_path, load_emissivity=False)
 
 #create dummy ebtel interface for calculating NEI populations
 class DummyHeatingModel(object):
@@ -22,9 +22,16 @@ class DummyHeatingModel(object):
         self.base_config = {}
 ebtel_interface = EbtelInterface({},DummyHeatingModel(),'','')
 
+# configure options for nei calculation
+ion_data_options = {'logTa':4.5,'logTb':8.0,'dlogT':0.05}
+nei_solver_options = {'cutoff':1e-6}
+
 # calculate fractional ionization
 field.calculate_fractional_ionization(emiss_model,interface=ebtel_interface,
-                                      savefile=args.nei_save)
+                                      savefile=args.nei_save,
+                                      nei_solver_options=nei_solver_options,
+                                      ion_data_options=ion_data_options
+                                     )
 
 # save field
 field.save(savedir=args.field_path)
