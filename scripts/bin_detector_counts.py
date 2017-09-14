@@ -20,12 +20,11 @@ field = synthesizAR.Skeleton.restore(args.field_path)
 emission_model = EmissionModel.restore(args.em_model_path, load_emissivity=False)
 
 # create instruments
-observing_time = [7.5e3,1e4]*u.s
-aia = InstrumentSDOAIA(observing_time,
+aia = InstrumentSDOAIA([7.5e3,1.25e4]*u.s,
                        use_temperature_response_functions=False,
                        emission_model=emission_model
                       )
-eis = InstrumentHinodeEIS(observing_time)
+eis = InstrumentHinodeEIS([7.5e3,1.25e4]*u.s)
 
 # create observer
 ds = field._convert_angle_to_length(0.4*u.arcsec)
